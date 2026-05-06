@@ -94,6 +94,12 @@ class Jogo(Model):
     gols_visitante = PositiveSmallIntegerField(default=0)
     status = CharField(choices=status_jogo, null=False, blank=False)
     
+    def gol_mandante(self):
+        self.gol_mandante += 1
+    
+    def gol_visitante(self):
+        self.gol_visitante += 1
+     
     def __str__(self):
         return f"{self.selecao_mandante} - {self.selecao_visitante} - {self.fase} - {self.grupo} - Placar: {self.gols_mandante} X {self.gols_visitante}"
     
@@ -117,7 +123,7 @@ class EventoJogo(Model):
     acrescimo = BooleanField(default=False, null=False, blank=False)
     
     def __str__(self):
-        return f"{self.tipo} - {self.minuto}' - {self.jogador} - {self.jogo}"
+        return f"{self.tipo} - {self.minuto}' - {self.jogador.nome_guerra} - {self.jogo}"
     
     def save(self, *args, **kwargs):
         evento_novo = self.pk is None
@@ -150,9 +156,9 @@ class EventoJogo(Model):
 
         if self.tipo == 'GOL':
             if jogador_e_mandante:
-                jogo.gols_mandante += 1
+                jogo.gol_mandante()
             else:
-                jogo.gols_visitante += 1
+                jogo.gol_visitante()
             jogo.save()
 
         elif self.tipo == 'GOL_CONTRA':
