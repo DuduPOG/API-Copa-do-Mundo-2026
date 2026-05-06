@@ -6,12 +6,18 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 class Grupo(Model):
     nome = CharField(max_length=1, null=False, blank=False,)
     descricao = TextField(blank=True)
+    
+    def __str__(self):
+        return f"Grupo {self.nome} - {self.descricao}"
 
 
 class Tecnico(Model):
     nome = CharField(max_length=150)
     nacionalidade = CharField(max_length=100)
     data_nascimento = DateField()
+    
+    def __str__(self):
+        return f"{self.nome} - {self.nacionalidade}"
 
 class Selecao(Model):
     confederacoes = [
@@ -29,6 +35,9 @@ class Selecao(Model):
     grupo = ForeignKey(Grupo, on_delete=PROTECT, related_name='selecoes')
     tecnico = OneToOneField(Tecnico, on_delete=SET_NULL, null=True, related_name='selecao')
     escudo_url = URLField(blank=True)
+    
+    def __str__(self):
+        return f"{self.nome} - {self.sigla} - {self.confederacao} - {self.grupo}"
     
 class Jogador(Model):
     posicoes = [
@@ -53,6 +62,8 @@ class Jogador(Model):
     data_nascimento = DateField()
     suspenso = BooleanField(default=False, null=False, blank=False)
     
+    def __str__(self):
+        return f"{self.nome_guerra} - {self.posicao} - {self.numero_camisa} - {self.selecao}"
     
     
 class Jogo(Model):
@@ -82,6 +93,9 @@ class Jogo(Model):
     gols_mandante = PositiveSmallIntegerField(default=0)
     gols_visitante = PositiveSmallIntegerField(default=0)
     status = CharField(choices=status_jogo, null=False, blank=False)
+    
+    def __str__(self):
+        return f"{self.selecao_mandante} - {self.selecao_visitante} - {self.fase} - {self.grupo} - Placar: {self.gols_mandante} X {self.gols_visitante}"
     
 class EventoJogo(Model):
     eventos = [
