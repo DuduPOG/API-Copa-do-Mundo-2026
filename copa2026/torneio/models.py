@@ -116,6 +116,9 @@ class EventoJogo(Model):
     minuto = PositiveSmallIntegerField(validators=minutos_validos, null=False, blank=False)
     acrescimo = BooleanField(default=False, null=False, blank=False)
     
+    def __str__(self):
+        return f"{self.tipo} - {self.minuto}' - {self.jogador} - {self.jogo}"
+    
     def save(self, *args, **kwargs):
         evento_novo = self.pk is None
         
