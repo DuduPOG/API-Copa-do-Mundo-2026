@@ -31,7 +31,7 @@ class Selecao(Model):
     
     nome = CharField(max_length=100, null=False, blank=False)
     sigla = CharField(max_length=3, unique=True, null=False, blank=False)
-    confederacao = CharField(choices=confederacoes, null=False, blank=False)
+    confederacao = CharField(choices=confederacoes, max_length=20, null=False, blank=False)
     grupo = ForeignKey(Grupo, on_delete=PROTECT, related_name='selecoes')
     tecnico = OneToOneField(Tecnico, on_delete=SET_NULL, null=True, related_name='selecao')
     escudo_url = URLField(blank=True)
@@ -57,7 +57,7 @@ class Jogador(Model):
     nome = CharField(max_length=150)
     nome_guerra = CharField(max_length=50)
     selecao = ForeignKey(Selecao, on_delete=PROTECT, related_name='jogadores')
-    posicao = CharField(choices=posicoes, null=False, blank=False)
+    posicao = CharField(choices=posicoes, max_length=20, null=False, blank=False)
     numero_camisa = PositiveSmallIntegerField(validators=numeros_validos, null=False, blank=False, help_text="Insira um valor entre 1 e 26")
     data_nascimento = DateField()
     suspenso = BooleanField(default=False, null=False, blank=False)
@@ -85,20 +85,20 @@ class Jogo(Model):
     
     selecao_mandante = ForeignKey(Selecao, on_delete=PROTECT, related_name='jogos_mandante')
     selecao_visitante = ForeignKey(Selecao, on_delete=PROTECT, related_name='jogos_visitante')
-    fase = CharField(choices=fases, null=False, blank=False)
+    fase = CharField(choices=fases, max_length=20, null=False, blank=False)
     grupo = ForeignKey(Grupo, on_delete=PROTECT, null=True, blank=True)
     data_hora = DateTimeField()
     estadio = CharField(max_length=150, blank=True)
     cidade = CharField(max_length=150, blank=True)
     gols_mandante = PositiveSmallIntegerField(default=0)
     gols_visitante = PositiveSmallIntegerField(default=0)
-    status = CharField(choices=status_jogo, null=False, blank=False)
+    status = CharField(choices=status_jogo, max_length=20, null=False, blank=False)
     
     def gol_mandante(self):
-        self.gol_mandante += 1
+        self.gols_mandante += 1
     
     def gol_visitante(self):
-        self.gol_visitante += 1
+        self.gols_visitante += 1
      
     def __str__(self):
         return f"{self.selecao_mandante} - {self.selecao_visitante} - {self.fase} - {self.grupo} - Placar: {self.gols_mandante} X {self.gols_visitante}"
@@ -118,7 +118,7 @@ class EventoJogo(Model):
     
     jogo = ForeignKey(Jogo, on_delete=CASCADE, related_name='eventos')
     jogador = ForeignKey(Jogador, on_delete=PROTECT, related_name='eventos')
-    tipo = CharField(choices=eventos, null=False, blank=False)
+    tipo = CharField(choices=eventos, max_length=20, null=False, blank=False)
     minuto = PositiveSmallIntegerField(validators=minutos_validos, null=False, blank=False)
     acrescimo = BooleanField(default=False, null=False, blank=False)
     
